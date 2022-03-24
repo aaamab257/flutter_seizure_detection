@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_seizure_detection/main.dart';
 import 'package:flutter_seizure_detection/menu.dart';
 import 'package:flutter_seizure_detection/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
 
@@ -11,6 +12,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _auth = FirebaseAuth.instance;
+  String email = "";
+  String pass = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +37,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                child: TextField(
+                child: TextFormField(
+                  onChanged: (value){
+                    email = value.toString().trim();
+                  },
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     keyboardType: TextInputType.emailAddress,
@@ -50,7 +58,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                child: TextField(
+                child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please enter Password";
+                      }
+                    },
+                    onChanged: (value) {
+                      pass = value;
+                    },
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.ltr,
                     maxLines: 1,
@@ -71,11 +87,14 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 width: 150,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MenuHome()),
-                    );
+                  onPressed: () async {
+                    try{
+                      await _auth.signInWithEmailAndPassword(email: email, password: pass);
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MenuHome()),
+                      );
+                    } on FirebaseAuthException catch (e){}
                   },
                   child: Text('Sign In'),
                   style: ButtonStyle(

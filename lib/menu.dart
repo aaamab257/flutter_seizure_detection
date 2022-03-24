@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_seizure_detection/home_page.dart';
 import 'package:flutter_seizure_detection/login.dart';
 import 'package:flutter_seizure_detection/patiant_info.dart';
+import 'package:flutter_seizure_detection/view_report.dart';
 
 class MenuHome extends StatefulWidget {
   @override
@@ -21,14 +23,22 @@ class _MenuHomeState extends State<MenuHome> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ListTile(
-                leading: Image.asset(
-                  'assets/images/home.png',
-                  scale: 1,
-                ),
-                title: Text(
-                  'Home Page',
-                  style: TextStyle(fontSize: 18),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
+                child: ListTile(
+                  leading: Image.asset(
+                    'assets/images/home.png',
+                    scale: 1,
+                  ),
+                  title: Text(
+                    'Home Page',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
               SizedBox(
@@ -38,7 +48,7 @@ class _MenuHomeState extends State<MenuHome> {
                 onTap: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PatientInfo()),
+                    MaterialPageRoute(builder: (context) => PatientInfo(userId: "1321321",)),
                   );
                 },
                 child: ListTile(
@@ -55,14 +65,22 @@ class _MenuHomeState extends State<MenuHome> {
               SizedBox(
                 height: 15,
               ),
-              ListTile(
-                leading: Image.asset(
-                  'assets/images/update.png',
-                  scale: 1,
-                ),
-                title: Text(
-                  'View Report',
-                  style: TextStyle(fontSize: 18),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ViewReport()),
+                  );
+                },
+                child: ListTile(
+                  leading: Image.asset(
+                    'assets/images/update.png',
+                    scale: 1,
+                  ),
+                  title: Text(
+                    'View Report',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
               SizedBox(

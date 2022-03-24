@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_seizure_detection/patiant_info.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -11,6 +11,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final _auth = FirebaseAuth.instance;
+  String name= "" , email= "" , pass = "" ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +34,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                child: TextField(
+                child: TextFormField(
+                  onChanged: (value){
+                    name = value.toString().trim();
+                  },
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     keyboardType: TextInputType.text,
@@ -50,7 +55,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                child: TextField(
+                child: TextFormField(
+                  validator: (value){
+                    if(value!.isEmpty){
+                      email = value;
+                    }
+                  },
+                    onChanged: (v){
+                    email = v ;
+                    },
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.ltr,
                     maxLines: 1,
@@ -69,7 +82,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                child: TextField(
+                child: TextFormField(
+                  validator: (v){
+                    if(v!.isEmpty){
+                      pass = v;
+                    }
+                  },
+                    onChanged: (v){
+                    pass = v;
+                  },
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.ltr,
                     maxLines: 1,
@@ -90,11 +111,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Container(
                 width: 150,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PatientInfo()),
-                    );
+                  onPressed: () async {
+                    try{
+                      await _auth.createUserWithEmailAndPassword(email: email, password: pass);
+                     await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PatientInfo(userId :_auth.currentUser!.uid)),
+                      );
+                    }on FirebaseAuthException catch (e){}
+
+
 
                   },
                   child: Text('Sign Up'),

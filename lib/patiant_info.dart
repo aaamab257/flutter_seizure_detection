@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_seizure_detection/patient_second_info.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class PatientInfo extends StatefulWidget {
+  String userId = "";
+  PatientInfo({Key? key, required this.userId}) : super(key: key);
   @override
   _PatientInfoState createState() => _PatientInfoState();
 }
 
 class _PatientInfoState extends State<PatientInfo> {
+  final databaseReference = FirebaseDatabase.instance.reference();
+  String fName = '' , sName = '' , nId = "" , height = '' , weight = '' ;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: const Color(0xffE8D9E4),
       appBar: AppBar(
@@ -32,7 +38,10 @@ class _PatientInfoState extends State<PatientInfo> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                child: TextField(
+                child: TextFormField(
+                  onChanged: (v){
+                    fName = v ;
+                  },
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     keyboardType: TextInputType.text,
@@ -47,7 +56,10 @@ class _PatientInfoState extends State<PatientInfo> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                child: TextField(
+                child: TextFormField(
+                    onChanged: (v){
+                      sName = v ;
+                    },
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     keyboardType: TextInputType.text,
@@ -61,7 +73,10 @@ class _PatientInfoState extends State<PatientInfo> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                child: TextField(
+                child: TextFormField(
+                    onChanged: (v){
+                      nId = v ;
+                    },
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     keyboardType: TextInputType.number,
@@ -76,7 +91,10 @@ class _PatientInfoState extends State<PatientInfo> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                child: TextField(
+                child: TextFormField(
+                    onChanged: (v){
+                      height = v ;
+                    },
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     keyboardType: TextInputType.number,
@@ -91,7 +109,10 @@ class _PatientInfoState extends State<PatientInfo> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                child: TextField(
+                child: TextFormField(
+                    onChanged: (v){
+                      weight = v ;
+                    },
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     keyboardType: TextInputType.number,
@@ -105,10 +126,17 @@ class _PatientInfoState extends State<PatientInfo> {
               Container(
                 width: 150,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async{
+                    await databaseReference.child(widget.userId).set({
+                      'fname': fName,
+                      'lname': sName,
+                      'national_id': nId,
+                      'height' : height,
+                      'weight' : weight,
+                    });
+                   await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PateintInfoSecond()),
+                      MaterialPageRoute(builder: (context) => PateintInfoSecond(userId: widget.userId,)),
                     );
                   },
                   child: Text('Next'),

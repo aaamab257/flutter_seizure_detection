@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aaamab.flutter_seizure_detection">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="Seizure detection"
         android:name="${applicationName}"
@@ -30,5 +31,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyBjcuypNOQyzom1rfHKaxR0Wx7R6mPpCS4"/>
     </application>
 </manifest>
